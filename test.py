@@ -2,9 +2,9 @@
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
-from torchvision import transforms as transforms
 import numpy as np
 import matplotlib.pyplot as plt
+import albumentations as A
 
 from DataSetTXT import Dataset
 from Models.MobileNet_v2 import MobileNetV2
@@ -32,8 +32,8 @@ if __name__ == '__main__':
 
     batch_size = 1
 
-    test_transform = transforms.Compose([
-        transforms.CenterCrop((224, 224)),
+    test_transform = A.Compose([
+        A.CenterCrop(224, 224),
         ])
 
     test_data = Dataset(csv_file='C:/Diploma/CSV/Test.csv', root_dir='', transform=test_transform)

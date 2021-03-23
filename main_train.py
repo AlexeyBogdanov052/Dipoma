@@ -26,9 +26,8 @@ if __name__ == '__main__':
     #    ])
 
     train_transform = A.Compose([
-        A.RandomRotate90(),
+        A.RandomCrop(224, 224),
         A.Flip(),
-        A.Transpose(),
         A.OneOf([
             A.IAAAdditiveGaussianNoise(),
             A.GaussNoise(),
@@ -54,13 +53,11 @@ if __name__ == '__main__':
     ])
 
     val_transform = A.Compose([
-        A.RandomRotate90(),
-        A.Flip(),
-        A.Transpose()
+        A.CenterCrop(224, 224)
     ])
 
-    train_data = Dataset(csv_file='C:/Diploma/CSV/Train.csv', root_dir='', transform=train_transform)
-    val_data = Dataset(csv_file='C:/Diploma/CSV/Validation.csv', root_dir='', transform=val_transform)
+    train_data = Dataset(csv_file='C:/Diploma/CSV/Train(1).csv', root_dir='', transform=train_transform)
+    val_data = Dataset(csv_file='C:/Diploma/CSV/Validation(1).csv', root_dir='', transform=val_transform)
 
 
     train_dataloader = torch.utils.data.DataLoader(train_data, batch_size=batch_size,
@@ -68,9 +65,12 @@ if __name__ == '__main__':
     val_dataloader = DataLoader(val_data, batch_size=batch_size,
                                 shuffle=False, num_workers=4)
 
-    model = MobileNetV2(n_class=2)
-    model.load_state_dict(torch.load('model_cifar.pt'))
+    #model = MobileNetV2(n_class=2)
+    #model.load_state_dict(torch.load('model_cifar.pt'))
     # print(model)
+    model = MobileNetV2(n_class=1000)
+    model.load_state_dict(torch.load('mobilenetv2_1.0-f2a8633.pth.tar'))
+    model.classifier = nn.Linear(model.last_channel, 2)
 
     # =============================================================================#
     criterion = nn.CrossEntropyLoss()
@@ -113,7 +113,7 @@ if __name__ == '__main__':
             print('Validation loss decreased ({:.6f} --> {:.6f}). Saving model ...'.format(
                 valid_loss_min,
                 valid_loss))
-            torch.save(model.state_dict(), 'model_cifar.pt')
+            torch.save(model.state_dict(), 'mobilenetv2_1.0-f2a8633.pth.tar')
             valid_loss_min = valid_loss
 
         scheduler.step()
