@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     num_workers = 0
     batch_size = 20
-    WD = 0.1
+    WD = 0.001
 
     # train_transform = transforms.Compose([
     #    transforms.RandomCrop((224, 224)),
@@ -56,8 +56,8 @@ if __name__ == '__main__':
         A.CenterCrop(224, 224)
     ])
 
-    train_data = Dataset(csv_file='C:/Diploma/CSV/Train(1).csv', root_dir='', transform=train_transform)
-    val_data = Dataset(csv_file='C:/Diploma/CSV/Validation(1).csv', root_dir='', transform=val_transform)
+    train_data = Dataset(csv_file='C:/Diploma/CSV/Train.csv', root_dir='', transform=train_transform)
+    val_data = Dataset(csv_file='C:/Diploma/CSV/Validation.csv', root_dir='', transform=val_transform)
 
 
     train_dataloader = torch.utils.data.DataLoader(train_data, batch_size=batch_size,
@@ -113,7 +113,7 @@ if __name__ == '__main__':
             print('Validation loss decreased ({:.6f} --> {:.6f}). Saving model ...'.format(
                 valid_loss_min,
                 valid_loss))
-            torch.save(model.state_dict(), 'mobilenetv2_1.0-f2a8633.pth.tar')
+            torch.save(model.state_dict(), 'mobilenetv2_my_model.pth.tar')
             valid_loss_min = valid_loss
 
         scheduler.step()
